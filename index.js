@@ -2,15 +2,25 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
+const session = require("express-session");
 
 const categoriesController=  require("./categories/categoriesController")
 const articlesController=  require("./articles/articlesController")
+const userController = require("./user/UserController");
 
 const Category = require("./categories/Category");
 const Articles = require("./articles/Articles");
+const User = require("./user/User");
+
 
 // View Engine
 app.set("view engine", "ejs");
+
+//Sessions
+app.use(session({
+    secret: "qualquercoisa",
+    cookie: {maxAge: 30000}
+}))
 
 // Static
 app.use(express.static("public"));
@@ -31,6 +41,7 @@ connection
 
 app.use("/", categoriesController)
 app.use("/", articlesController)
+app.use("/", userController)
 
 
 app.get("/", (req, res) => {
